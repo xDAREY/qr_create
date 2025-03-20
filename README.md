@@ -4,7 +4,7 @@ QR Create is a powerful **QR Code Generator** built with **Flutter**. It provide
 
 ## 📌 Features
 
-👉 Generate QR codes for **text, URLs, emails, contacts, and more**\
+👉 Generate QR codes for **text, Wifi password, URLs, emails, contacts, and more**\
 👉 Save & organize **QR code history**\
 👉 **Dark & Light Mode** with a modern UI\
 👉 Securely **store QR codes offline**\
