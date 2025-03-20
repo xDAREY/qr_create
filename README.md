@@ -99,11 +99,9 @@ flutter run
 
 ---
 
-## 📷 Screenshots
-
-| **Light Mode**   | **Dark Mode**    |
-| ---------------- | ---------------- |
-| *[Insert Image]* | *[Insert Image]* |
+## 📷 Screenshot
+![Homepage](https://github.com/user-attachments/assets/e28b98c1-efe7-4fe2-853f-6b0f984aeecc)
+![QR Code History](https://github.com/user-attachments/assets/bfefe938-8fa7-40ab-bfb4-3fc91019e78f)
 
 ---
 
