@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart'; // Import Riverpod
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:qr_create/presentation/pages/qr_code_history_screen.dart';
+import 'package:qr_create/presentation/pages/settings_screen.dart';
 import 'package:qr_create/presentation/pages/splash_screen.dart';
 import 'package:qr_create/presentation/pages/home_screen.dart';
 import 'package:qr_create/config/theme.dart';
@@ -27,6 +29,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const SplashScreen(),
         '/home': (context) => const HomeScreen(),
+        '/history': (context) => const QRCodeHistoryScreen(),
+        '/settings': (context) => const SettingsScreen(),
       },
     );
   }

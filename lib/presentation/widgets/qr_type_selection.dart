@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:qr_create/config/theme.dart';
 
 class QRTypeSelection extends StatelessWidget {
   final Function(String) onTypeSelected;
   final String selectedType;
 
   const QRTypeSelection({
-    Key? key,
+    super.key,
     required this.onTypeSelected,
     required this.selectedType,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class QRTypeSelection extends StatelessWidget {
         return ElevatedButton(
           onPressed: () => onTypeSelected(type),
           style: ElevatedButton.styleFrom(
-            backgroundColor: isSelected ? Colors.purple : Colors.grey.shade300,
+            backgroundColor: isSelected ? AppThemes.primaryPurple : Colors.grey.shade300,
             foregroundColor: isSelected ? Colors.white : Colors.black,
           ),
           child: Text(type),

@@ -10,16 +10,22 @@ class QRSaveShare extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ElevatedButton.icon(
-          onPressed: onSave,
-          icon: const Icon(Icons.download),
-          label: const Text('Save QR Code'),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            onPressed: onSave,
+            icon: const Icon(Icons.download, color: Colors.white,),
+            label: const Text('Save QR Code'),
+          ),
         ),
         const SizedBox(height: 8),
-        OutlinedButton.icon(
-          onPressed: onShare,
-          icon: const Icon(Icons.share),
-          label: const Text('Share QR Code'),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            onPressed: onShare,
+            icon: const Icon(Icons.share, color: Colors.white,),
+            label: const Text('Share QR Code'),
+          ),
         ),
       ],
     );

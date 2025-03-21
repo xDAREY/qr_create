@@ -35,6 +35,17 @@ class AppThemes {
         foregroundColor: Colors.white,
       ),
     ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 15),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
+        side: BorderSide.none,
+        backgroundColor: primaryPurple,
+        foregroundColor: Colors.white,
+      ),
+    ),
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -64,6 +75,17 @@ class AppThemes {
         side: BorderSide.none, 
         backgroundColor: darkPurple,
         foregroundColor: Colors.white, 
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 15),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
+        side: BorderSide.none,
+        backgroundColor: primaryPurple,
+        foregroundColor: Colors.white,
       ),
     ),
   );

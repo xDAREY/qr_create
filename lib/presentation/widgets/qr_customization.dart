@@ -15,29 +15,38 @@ class QRCustomization extends StatelessWidget {
     final colors = [Colors.blue, Colors.red, Colors.green, Colors.orange, Colors.purple];
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        const Text('QR Code Color:'),
+        const Align(
+          alignment: Alignment.center,
+          child: Text(
+            'QR Code Color:',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ),
         const SizedBox(height: 8),
-        Row(
-          children: colors.map((color) {
-            return GestureDetector(
-              onTap: () => onColorSelected(color),
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.black26),
+        Align(
+          alignment: Alignment.center,
+          child: Wrap(
+            spacing: 12,
+            children: colors.map((color) {
+              return GestureDetector(
+                onTap: () => onColorSelected(color),
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 6),
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: color,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2),
+                  ),
                 ),
-              ),
-            );
-          }).toList(),
+              );
+            }).toList(),
+          ),
         ),
         const SizedBox(height: 12),
-        
       ],
     );
   }

@@ -4,12 +4,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:hive/hive.dart';
 
 class QRState {
   final String selectedType;
   final Map<String, String> qrDataMap;
   final Color qrColor;
-  final ScreenshotController screenshotController; 
+  final ScreenshotController screenshotController;
 
   QRState({
     this.selectedType = 'Text',
@@ -65,13 +66,19 @@ class QRNotifier extends StateNotifier<QRState> {
   Future<void> saveQR(BuildContext context) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final filePath = '${directory.path}/qr_code.png';
+      final filePath = '${directory.path}/qr_code_${DateTime.now().millisecondsSinceEpoch}.png';
 
       final image = await state.screenshotController.capture();
       if (image == null) return;
 
       final file = File(filePath);
       await file.writeAsBytes(image);
+
+      // Save QR data to Hive for history
+      final box = await Hive.openBox<List<String>>('qr_history');
+      List<String> history = box.get('saved_qr_codes', defaultValue: [])!;
+      history.add(filePath);
+      await box.put('saved_qr_codes', history);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('QR Code saved to: $filePath')),
@@ -86,7 +93,7 @@ class QRNotifier extends StateNotifier<QRState> {
   Future<void> shareQR(BuildContext context) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final filePath = '${directory.path}/qr_code.png';
+      final filePath = '${directory.path}/qr_code_${DateTime.now().millisecondsSinceEpoch}.png';
 
       final image = await state.screenshotController.capture();
       if (image == null) return;
