@@ -8,6 +8,7 @@ class AppThemes {
 
   static ThemeData lightTheme = ThemeData(
     primaryColor: primaryPurple,
+    colorScheme: ColorScheme.light(primary: primaryPurple),
     scaffoldBackgroundColor: lightBackground,
     appBarTheme: const AppBarTheme(
       backgroundColor: primaryPurple,
@@ -31,18 +32,18 @@ class AppThemes {
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
         side: BorderSide.none,
-        backgroundColor: primaryPurple,
+        backgroundColor: primaryPurple, // Keep this consistent
         foregroundColor: Colors.white,
       ),
     ),
-      outlinedButtonTheme: OutlinedButtonThemeData(
+    outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 15),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
         side: BorderSide.none,
-        backgroundColor: primaryPurple,
+        backgroundColor: primaryPurple, // Keep this consistent
         foregroundColor: Colors.white,
       ),
     ),
@@ -50,6 +51,7 @@ class AppThemes {
 
   static ThemeData darkTheme = ThemeData(
     primaryColor: darkPurple,
+    colorScheme: ColorScheme.dark(primary: darkPurple),
     scaffoldBackgroundColor: darkBackground,
     appBarTheme: const AppBarTheme(
       backgroundColor: darkPurple,
@@ -73,7 +75,7 @@ class AppThemes {
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
         side: BorderSide.none, 
-        backgroundColor: darkPurple,
+        backgroundColor: darkPurple, // Keep this consistent
         foregroundColor: Colors.white, 
       ),
     ),
@@ -84,7 +86,7 @@ class AppThemes {
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
         side: BorderSide.none,
-        backgroundColor: primaryPurple,
+        backgroundColor: primaryPurple, // Keep this consistent
         foregroundColor: Colors.white,
       ),
     ),

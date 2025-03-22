@@ -57,35 +57,41 @@ class QRGeneratorScreen extends ConsumerWidget {
     final qrState = ref.watch(qrProvider);
     final qrNotifier = ref.read(qrProvider.notifier);
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          QRTypeSelection(
-            onTypeSelected: qrNotifier.selectType,
-            selectedType: qrState.selectedType,
-          ),
-          const SizedBox(height: 16),
-          QRInputField(
-            qrType: qrState.selectedType,
-            onChanged: (value) => qrNotifier.updateInput('Input', value),
-          ),
-          const SizedBox(height: 16),
-          QRPreview(data: qrState.getFormattedQRData()),
-          const SizedBox(height: 16),
-          QRCustomization(
-            onColorSelected: qrNotifier.updateColor,
-            onAddLogo: () {
-              // TODO: Implement logo addition
-            },
-          ),
-          const SizedBox(height: 16),
-          QRSaveShare(
-            onSave: () => qrNotifier.saveQR(context),
-            onShare: () => qrNotifier.shareQR(context),
-          ),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('QR Create'),
+        automaticallyImplyLeading: false,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            QRTypeSelection(
+              onTypeSelected: qrNotifier.selectType,
+              selectedType: qrState.selectedType,
+            ),
+            const SizedBox(height: 16),
+            QRInputField(
+              qrType: qrState.selectedType,
+              onChanged: (value) => qrNotifier.updateInput('Input', value),
+            ),
+            const SizedBox(height: 16),
+            QRPreview(data: qrState.getFormattedQRData()),
+            const SizedBox(height: 16),
+            QRCustomization(
+              onColorSelected: qrNotifier.updateColor,
+              onAddLogo: () {
+                // TODO: Implement logo addition
+              },
+            ),
+            const SizedBox(height: 16),
+            QRSaveShare(
+              onSave: () => qrNotifier.saveQR(context),
+              onShare: () => qrNotifier.shareQR(context),
+            ),
+          ],
+        ),
       ),
     );
   }

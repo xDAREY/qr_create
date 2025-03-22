@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:qr_create/config/theme.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:hive/hive.dart';
@@ -111,3 +112,4 @@ class QRNotifier extends StateNotifier<QRState> {
 }
 
 final qrProvider = StateNotifierProvider<QRNotifier, QRState>((ref) => QRNotifier());
+final buttonColorProvider = StateProvider<Color>((ref) => AppThemes.primaryPurple);
