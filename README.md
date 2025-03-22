@@ -59,6 +59,7 @@ final qrProvider = StateProvider<String?>((ref) => null);
 | `share_plus`     | Sharing QR codes    |
 | `screenshot`     | QR code screenshots |
 | `hive`           | QR code history     |
+| `url_launcher`   | To open links       |
 
 ---
 

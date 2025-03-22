@@ -20,7 +20,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    const QRGeneratorScreen(),  // Your main QR generator screen
+    const QRGeneratorScreen(), 
     const QRCodeHistoryScreen(),
     const SettingsScreen(),
   ];
@@ -34,7 +34,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex], // Show the selected screen
+      body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         items: const [
@@ -42,13 +42,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
         ],
-        onTap: _onItemTapped, // Change the screen index
+        onTap: _onItemTapped,
       ),
     );
   }
 }
 
-// This is your main QR Generator UI extracted as a separate widget
 class QRGeneratorScreen extends ConsumerWidget {
   const QRGeneratorScreen({super.key});
 

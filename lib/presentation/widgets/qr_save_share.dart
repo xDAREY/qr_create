@@ -9,7 +9,6 @@ class QRSaveShare extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Use AppThemes.primaryPurple directly to avoid theme color changes
     final buttonColor = AppThemes.primaryPurple;
     
     return Column(

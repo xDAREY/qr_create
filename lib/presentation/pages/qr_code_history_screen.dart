@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qr_create/providers/qr_history_provider.dart';
 import 'package:qr_create/providers/qr_provider.dart';
 
-final viewModeProvider = StateProvider<bool>((ref) => true); // true = ListView, false = GridView
+final viewModeProvider = StateProvider<bool>((ref) => true); 
 
 class QRCodeHistoryScreen extends ConsumerWidget {
   const QRCodeHistoryScreen({super.key});
@@ -23,7 +23,7 @@ class QRCodeHistoryScreen extends ConsumerWidget {
           IconButton(
             icon: Icon(isListView ? Icons.grid_view : Icons.list),
             onPressed: () {
-              ref.read(viewModeProvider.notifier).state = !isListView; // Toggle view mode
+              ref.read(viewModeProvider.notifier).state = !isListView; 
             },
           ),
         ],

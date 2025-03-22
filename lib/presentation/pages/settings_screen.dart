@@ -91,8 +91,6 @@ class SettingsScreen extends ConsumerWidget {
             ),
             
             // History & Storage Section
-            // In the SettingsScreen class
-            // History & Storage Section
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 24, bottom: 8),
               child: Text(
@@ -132,9 +130,10 @@ class SettingsScreen extends ConsumerWidget {
                       leading: Icon(Icons.delete, color: Colors.grey),
                       title: Text('Clear QR History', style: TextStyle(color: Colors.grey)),
                     ),
-                    error: (_, __) => const ListTile(
-                      leading: Icon(Icons.delete, color: Colors.grey),
-                      title: Text('Clear QR History', style: TextStyle(color: Colors.grey)),
+                    error: (_, __) => ListTile(
+                      leading: const Icon(Icons.delete, color: Colors.grey),
+                      title: const Text('Clear QR History', style: TextStyle(color: Colors.grey)),
+                      onTap: () => _showRecoveryDialog(context, ref),
                     ),
                   );
                 }
@@ -177,7 +176,7 @@ class SettingsScreen extends ConsumerWidget {
                     title: const Text('Check for Updates'),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () {
-                      // Implementation for checking updates
+
                     },
                   ),
                 ],
@@ -245,9 +244,9 @@ class SettingsScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Clear QR History'),
+        title: const Text('Clear History'),
         content: const Text(
-          'Are you sure you want to clear all saved QR codes? This action cannot be undone.'
+          'Are you sure you want to clear your QR code history? This action cannot be undone.'
         ),
         actions: [
           TextButton(
@@ -256,19 +255,79 @@ class SettingsScreen extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () async {
-              // Clear QR history
-              final box = await Hive.openBox<List<String>>('qr_history');
-              await box.put('saved_qr_codes', []);
-              ref.invalidate(qrHistoryProvider);
+              try {
+                final box = await Hive.openBox<List<String>>('qr_history');
+                await box.put('saved_qr_codes', []);
               
-              if (context.mounted) {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('QR history cleared successfully')),
-                );
+              ref.invalidate(qrHistoryProvider);
+                
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('History cleared successfully')),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error clearing history: $e')),
+                  );
+                }
               }
             },
             child: const Text('Clear', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  void _showRecoveryDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Storage Error'),
+        content: const Text(
+          'There was an error accessing your QR history. Would you like to reset the storage to fix this issue?'
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              try {
+                if (Hive.isBoxOpen('qr_history')) {
+                  await Hive.box('qr_history').clear();
+                } else {
+                  final box = await Hive.openBox<List<String>>('qr_history');
+                  await box.clear();
+                }
+                
+                // Put an empty list
+                final box = await Hive.openBox<List<String>>('qr_history');
+                await box.put('saved_qr_codes', []);
+                
+                ref.invalidate(qrHistoryProvider);
+                
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Storage reset successfully')),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error resetting storage: $e')),
+                  );
+                }
+              }
+            },
+            child: const Text('Reset Storage', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -286,7 +345,8 @@ class SettingsScreen extends ConsumerWidget {
           children: [
             const Text('For any queries or feedback, please contact:'),
             const SizedBox(height: 8),
-            const SelectableText('oluwadare.emmanuel15@gmail.com'),
+            // TODO: .env for the email address
+            const SelectableText('oluwadare.emmanuel15@gmail.com'), 
             const SizedBox(height: 16),
             ElevatedButton.icon(
               icon: const Icon(Icons.email),
@@ -351,7 +411,6 @@ class SettingsScreen extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () {
-              // Save selected color and close dialog
               Navigator.pop(context);
             },
             child: const Text('Apply'),
@@ -368,7 +427,6 @@ class SettingsScreen extends ConsumerWidget {
     return GestureDetector(
       onTap: () {
         ref.read(themeColorProvider.notifier).state = color;
-        // Save this preference (implementation needed)
       },
       child: Container(
         width: 50,

@@ -54,7 +54,7 @@ class QRInputField extends StatelessWidget {
       maxLines: maxLines,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: Colors.purple[300]), // Use purple for hint text
+        hintStyle: TextStyle(color: Colors.purple[300]), 
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
@@ -74,16 +74,16 @@ class QRInputField extends StatelessWidget {
           borderSide: BorderSide(color: Colors.purple, width: 2.0),
         ),
       ),
-      hint: Text(hint, style: TextStyle(color: Colors.purple[300])), // Make hint text purple
-      dropdownColor: Colors.white, // White background for dropdown items
+      hint: Text(hint, style: TextStyle(color: Colors.purple[300])), 
+      dropdownColor: Colors.white, 
       style: TextStyle(
-        color: Colors.purple[700], // Purple color for selected item text
+        color: Colors.purple[700], 
         fontWeight: FontWeight.w500,
       ),
       icon: Icon(Icons.arrow_drop_down, color: Colors.purple),
       items: options.map((opt) => DropdownMenuItem(
         value: opt,
-        child: Text(opt, style: TextStyle(color: Colors.purple[700])), // Style for dropdown items
+        child: Text(opt, style: TextStyle(color: Colors.purple[700])), 
       )).toList(),
       onChanged: (value) => onChanged(value ?? ''),
     );

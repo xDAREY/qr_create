@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:qr_create/presentation/pages/qr_code_history_screen.dart';
 import 'package:qr_create/presentation/pages/settings_screen.dart';
 import 'package:qr_create/presentation/pages/splash_screen.dart';
@@ -9,10 +11,8 @@ import 'package:qr_create/config/theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize Hive
-  // Make sure to add this if not already done
-  // final appDocumentDir = await getApplicationDocumentsDirectory();
-  // Hive.init(appDocumentDir.path);
+  final appDocumentDir = await getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDir.path);
   
   runApp(
     const ProviderScope(
@@ -37,7 +37,6 @@ class MyApp extends ConsumerWidget {
       appBarTheme: AppThemes.lightTheme.appBarTheme.copyWith(
         backgroundColor: themeColor,
       ),
-      // We're not modifying button themes here
     );
     
     final darkTheme = AppThemes.darkTheme.copyWith(
@@ -48,7 +47,6 @@ class MyApp extends ConsumerWidget {
       appBarTheme: AppThemes.darkTheme.appBarTheme.copyWith(
         backgroundColor: themeColor,
       ),
-      // We're not modifying button themes here
     );
     
     return MaterialApp(

@@ -32,7 +32,7 @@ class AppThemes {
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
         side: BorderSide.none,
-        backgroundColor: primaryPurple, // Keep this consistent
+        backgroundColor: primaryPurple, 
         foregroundColor: Colors.white,
       ),
     ),
@@ -43,7 +43,7 @@ class AppThemes {
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
         side: BorderSide.none,
-        backgroundColor: primaryPurple, // Keep this consistent
+        backgroundColor: primaryPurple,
         foregroundColor: Colors.white,
       ),
     ),
@@ -75,7 +75,7 @@ class AppThemes {
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
         side: BorderSide.none, 
-        backgroundColor: darkPurple, // Keep this consistent
+        backgroundColor: darkPurple, 
         foregroundColor: Colors.white, 
       ),
     ),
@@ -86,7 +86,7 @@ class AppThemes {
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
         side: BorderSide.none,
-        backgroundColor: primaryPurple, // Keep this consistent
+        backgroundColor: primaryPurple, 
         foregroundColor: Colors.white,
       ),
     ),
