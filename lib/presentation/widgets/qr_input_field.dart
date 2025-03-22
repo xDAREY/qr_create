@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:qr_create/presentation/pages/settings_screen.dart';
 
-class QRInputField extends StatelessWidget {
+class QRInputField extends ConsumerWidget {
   final String qrType;
   final Function(String) onChanged;
 
@@ -11,79 +13,83 @@ class QRInputField extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeColor = ref.watch(themeColorProvider);
+
     switch (qrType) {
       case 'WiFi':
         return Column(
           children: [
-            _buildTextField('SSID', onChanged),
+            _buildTextField('SSID', onChanged, themeColor),
             const SizedBox(height: 8),
-            _buildTextField('Password', onChanged, obscureText: true),
+            _buildTextField('Password', onChanged, themeColor, obscureText: true),
             const SizedBox(height: 8),
-            _buildDropdown(['WPA', 'WEP', 'None'], 'Security Type', onChanged),
+            _buildDropdown(['WPA', 'WEP', 'None'], 'Security Type', onChanged, themeColor),
           ],
         );
       case 'Email':
         return Column(
           children: [
-            _buildTextField('To', onChanged),
+            _buildTextField('To', onChanged, themeColor),
             const SizedBox(height: 8),
-            _buildTextField('Subject', onChanged),
+            _buildTextField('Subject', onChanged, themeColor),
             const SizedBox(height: 8),
-            _buildTextField('Body', onChanged, maxLines: 3),
+            _buildTextField('Body', onChanged, themeColor, maxLines: 3),
           ],
         );
       case 'vCard':
         return Column(
           children: [
-            _buildTextField('Full Name', onChanged),
+            _buildTextField('Full Name', onChanged, themeColor),
             const SizedBox(height: 8),
-            _buildTextField('Phone Number', onChanged),
+            _buildTextField('Phone Number', onChanged, themeColor),
             const SizedBox(height: 8),
-            _buildTextField('Email', onChanged),
+            _buildTextField('Email', onChanged, themeColor),
           ],
         );
       default:
-        return _buildTextField('Enter $qrType', onChanged);
+        return _buildTextField('Enter $qrType', onChanged, themeColor);
     }
   }
 
-  Widget _buildTextField(String hint, Function(String) onChanged, {bool obscureText = false, int maxLines = 1}) {
+  Widget _buildTextField(String hint, Function(String) onChanged, Color themeColor, {bool obscureText = false, int maxLines = 1}) {
     return TextField(
       obscureText: obscureText,
       maxLines: maxLines,
+      cursorColor: themeColor,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: Colors.purple[300]), 
+        hintStyle: TextStyle(color: themeColor.withOpacity(0.6)),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide(color: Colors.purple, width: 2.0),
+          borderSide: BorderSide(color: themeColor, width: 2.0),
         ),
       ),
       onChanged: onChanged,
     );
   }
 
-  Widget _buildDropdown(List<String> options, String hint, Function(String) onChanged) {
+  Widget _buildDropdown(List<String> options, String hint, Function(String) onChanged, Color themeColor) {
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide(color: Colors.purple, width: 2.0),
+          borderSide: BorderSide(color: themeColor, width: 2.0),
         ),
+        hintText: hint,
+        hintStyle: TextStyle(color: themeColor.withOpacity(0.6)),
       ),
-      hint: Text(hint, style: TextStyle(color: Colors.purple[300])), 
-      dropdownColor: Colors.white, 
+      dropdownColor: Colors.white,
       style: TextStyle(
-        color: Colors.purple[700], 
+        color: themeColor,
         fontWeight: FontWeight.w500,
       ),
-      icon: Icon(Icons.arrow_drop_down, color: Colors.purple),
+      icon: Icon(Icons.arrow_drop_down, color: themeColor),
       items: options.map((opt) => DropdownMenuItem(
         value: opt,
-        child: Text(opt, style: TextStyle(color: Colors.purple[700])), 
+        child: Text(opt, style: TextStyle(color: themeColor)),
       )).toList(),
       onChanged: (value) => onChanged(value ?? ''),
     );

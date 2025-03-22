@@ -47,6 +47,14 @@ class QRCustomization extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
+        
+        //TODO: Implement logo addition later in the future
+
+        // ElevatedButton.icon(
+        //   onPressed: onAddLogo,
+        //   icon: const Icon(Icons.add_a_photo),
+        //   label: const Text('Add Logo'),
+        // ),
       ],
     );
   }

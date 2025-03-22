@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:qr_create/config/theme.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:qr_create/presentation/pages/settings_screen.dart';
 
-class QRTypeSelection extends StatelessWidget {
+class QRTypeSelection extends ConsumerWidget {
   final Function(String) onTypeSelected;
   final String selectedType;
 
@@ -12,8 +13,9 @@ class QRTypeSelection extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final types = ['Text', 'URL', 'WiFi', 'vCard', 'Email', 'Phone', 'SMS', 'JSON'];
+    final themeColor = ref.watch(themeColorProvider);
 
     return Wrap(
       spacing: 8.0,
@@ -23,7 +25,7 @@ class QRTypeSelection extends StatelessWidget {
         return ElevatedButton(
           onPressed: () => onTypeSelected(type),
           style: ElevatedButton.styleFrom(
-            backgroundColor: isSelected ? AppThemes.primaryPurple : Colors.grey.shade300,
+            backgroundColor: isSelected ? themeColor : Colors.grey.shade300,
             foregroundColor: isSelected ? Colors.white : Colors.black,
           ),
           child: Text(type),
@@ -32,5 +34,3 @@ class QRTypeSelection extends StatelessWidget {
     );
   }
 }
-
-

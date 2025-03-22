@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:qr_create/presentation/pages/qr_code_history_screen.dart';
+import 'package:qr_create/presentation/pages/history_screen.dart';
 import 'package:qr_create/presentation/pages/settings_screen.dart';
 import 'package:qr_create/presentation/widgets/qr_customization.dart';
 import 'package:qr_create/presentation/widgets/qr_input_field.dart';
@@ -33,10 +33,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeColor = ref.watch(themeColorProvider);
     return Scaffold(
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
+        selectedItemColor: themeColor,
+        unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),

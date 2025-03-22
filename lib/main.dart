@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:qr_create/presentation/pages/qr_code_history_screen.dart';
+import 'package:qr_create/presentation/pages/history_screen.dart';
 import 'package:qr_create/presentation/pages/settings_screen.dart';
 import 'package:qr_create/presentation/pages/splash_screen.dart';
 import 'package:qr_create/presentation/pages/home_screen.dart';
