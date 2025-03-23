@@ -15,8 +15,7 @@ void main() async {
   Hive.init(appDocumentDir.path);
   
   runApp(
-    const ProviderScope(
-      child: MyApp(),
+    const ProviderScope(child: MyApp()
     ),
   );
 }

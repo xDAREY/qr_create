@@ -4,21 +4,16 @@ import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
-// Updated provider to handle the correct data structure
 final qrHistoryProvider = FutureProvider<List<Map<String, dynamic>>>((ref) async {
   try {
-    // Open the box with the correct type parameter
     final box = await Hive.openBox('qr_history');
     final List<dynamic>? rawHistory = box.get('saved_qr_codes') as List?;
     
     if (rawHistory == null || rawHistory.isEmpty) return [];
     
-    // Convert dynamic list to List<Map<String, dynamic>>
     final List<Map<String, dynamic>> history = 
         rawHistory.map((item) => Map<String, dynamic>.from(item as Map)).toList();
-    
-    // Sort by timestamp, newest first
-    history.sort((a, b) => (b['timestamp'] ?? 0).compareTo(a['timestamp'] ?? 0));
+        history.sort((a, b) => (b['timestamp'] ?? 0).compareTo(a['timestamp'] ?? 0));
     
     return history;
   } catch (e) {

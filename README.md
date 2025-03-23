@@ -60,6 +60,7 @@ final qrProvider = StateProvider<String?>((ref) => null);
 | `screenshot`     | QR code screenshots |
 | `hive`           | QR code history     |
 | `url_launcher`   | To open links       |
+| `image_gallery`  | To save to photos   |
 
 ---
 
