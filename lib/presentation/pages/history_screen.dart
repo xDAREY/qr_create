@@ -2,8 +2,30 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:qr_create/providers/qr_history_provider.dart';
-import 'package:qr_create/providers/qr_provider.dart';
+import 'package:share_plus/share_plus.dart';
+
+// Updated provider to handle the correct data structure
+final qrHistoryProvider = FutureProvider<List<Map<String, dynamic>>>((ref) async {
+  try {
+    // Open the box with the correct type parameter
+    final box = await Hive.openBox('qr_history');
+    final List<dynamic>? rawHistory = box.get('saved_qr_codes') as List?;
+    
+    if (rawHistory == null || rawHistory.isEmpty) return [];
+    
+    // Convert dynamic list to List<Map<String, dynamic>>
+    final List<Map<String, dynamic>> history = 
+        rawHistory.map((item) => Map<String, dynamic>.from(item as Map)).toList();
+    
+    // Sort by timestamp, newest first
+    history.sort((a, b) => (b['timestamp'] ?? 0).compareTo(a['timestamp'] ?? 0));
+    
+    return history;
+  } catch (e) {
+    debugPrint('Error opening Hive box: $e');
+    return [];
+  }
+});
 
 final viewModeProvider = StateProvider<bool>((ref) => true); 
 
@@ -14,7 +36,6 @@ class QRCodeHistoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final history = ref.watch(qrHistoryProvider);
     final isListView = ref.watch(viewModeProvider);
-    final qrNotifier = ref.read(qrProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -35,22 +56,47 @@ class QRCodeHistoryScreen extends ConsumerWidget {
                 ? ListView.builder(
                     itemCount: qrList.length,
                     itemBuilder: (context, index) {
-                      final filePath = qrList[index];
+                      final item = qrList[index];
+                      final String filePath = item['path'] ?? '';
+                      final String qrType = item['type'] ?? 'QR';
+                      
                       return Card(
                         child: ListTile(
-                          leading: Image.file(File(filePath), width: 50, height: 50),
-                          title: Text('QR Code ${index + 1}'),
-                          subtitle: Text(filePath),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: () async {
-                              final box = await Hive.openBox<List<String>>('qr_history');
-                              List<String> updatedHistory = box.get('saved_qr_codes', defaultValue: [])!;
-                              updatedHistory.removeAt(index);
-                              await box.put('saved_qr_codes', updatedHistory);
-
-                              ref.invalidate(qrHistoryProvider);
-                            },
+                          leading: filePath.isNotEmpty 
+                              ? Image.file(File(filePath), width: 50, height: 50)
+                              : const Icon(Icons.qr_code, size: 50),
+                          title: Text('$qrType QR Code'),
+                          subtitle: Text(
+                            DateTime.fromMillisecondsSinceEpoch(
+                              item['timestamp'] ?? 0
+                            ).toString().substring(0, 16)
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.share, color: Colors.blue),
+                                onPressed: () {
+                                  if (filePath.isNotEmpty) {
+                                    Share.shareXFiles([XFile(filePath)], text: 'Here is my QR Code!');
+                                  }
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.red),
+                                onPressed: () async {
+                                  final box = await Hive.openBox('qr_history');
+                                  List<dynamic> rawHistory = box.get('saved_qr_codes', defaultValue: []) as List;
+                                  
+                                  rawHistory.removeWhere(
+                                    (element) => (element as Map)['id'] == item['id']
+                                  );
+                                  
+                                  await box.put('saved_qr_codes', rawHistory);
+                                  ref.invalidate(qrHistoryProvider);
+                                },
+                              ),
+                            ],
                           ),
                         ),
                       );
@@ -60,39 +106,55 @@ class QRCodeHistoryScreen extends ConsumerWidget {
                     padding: const EdgeInsets.all(8.0),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 1,
+                      childAspectRatio: 0.8,
                       crossAxisSpacing: 8,
                       mainAxisSpacing: 8,
                     ),
                     itemCount: qrList.length,
                     itemBuilder: (context, index) {
-                      final filePath = qrList[index];
+                      final item = qrList[index];
+                      final String filePath = item['path'] ?? '';
+                      final String qrType = item['type'] ?? 'QR';
+                      
                       return Card(
                         elevation: 3,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.file(File(filePath), width: 80, height: 80),
+                            filePath.isNotEmpty 
+                                ? Image.file(File(filePath), width: 100, height: 100)
+                                : const Icon(Icons.qr_code, size: 100),
                             const SizedBox(height: 8),
-                            Text('QR ${index + 1}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                            Text('$qrType QR', style: const TextStyle(fontWeight: FontWeight.bold)),
+                            Text(
+                              DateTime.fromMillisecondsSinceEpoch(
+                                item['timestamp'] ?? 0
+                              ).toString().substring(0, 10),
+                              style: const TextStyle(fontSize: 12, color: Colors.grey),
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 IconButton(
-                                  icon: const Icon(Icons.share),
+                                  icon: const Icon(Icons.share, color: Colors.blue),
                                   onPressed: () {
-                                    () => qrNotifier.shareQR(context);
+                                    if (filePath.isNotEmpty) {
+                                      Share.shareXFiles([XFile(filePath)], text: 'Here is my QR Code!');
+                                    }
                                   },
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.delete, color: Colors.red),
                                   onPressed: () async {
-                                    final box = await Hive.openBox<List<String>>('qr_history');
-                                    List<String> updatedHistory = box.get('saved_qr_codes', defaultValue: [])!;
-                                    updatedHistory.removeAt(index);
-                                    await box.put('saved_qr_codes', updatedHistory);
-
+                                    final box = await Hive.openBox('qr_history');
+                                    List<dynamic> rawHistory = box.get('saved_qr_codes', defaultValue: []) as List;
+                                    
+                                    rawHistory.removeWhere(
+                                      (element) => (element as Map)['id'] == item['id']
+                                    );
+                                    
+                                    await box.put('saved_qr_codes', rawHistory);
                                     ref.invalidate(qrHistoryProvider);
                                   },
                                 ),
