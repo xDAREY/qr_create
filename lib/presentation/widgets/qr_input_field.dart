@@ -59,7 +59,7 @@ class QRInputField extends ConsumerWidget {
       cursorColor: themeColor,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: themeColor.withOpacity(0.6)),
+        hintStyle: TextStyle(color: themeColor),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
@@ -79,7 +79,7 @@ class QRInputField extends ConsumerWidget {
           borderSide: BorderSide(color: themeColor, width: 2.0),
         ),
         hintText: hint,
-        hintStyle: TextStyle(color: themeColor.withOpacity(0.6)),
+        hintStyle: TextStyle(color: themeColor),
       ),
       dropdownColor: Colors.white,
       style: TextStyle(

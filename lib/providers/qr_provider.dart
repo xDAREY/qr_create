@@ -49,7 +49,6 @@ class QRState {
     }
   }
   
-  // Generate a unique identifier based on content
   String generateUniqueId() {
     String data = getFormattedQRData();
     return '${selectedType.toLowerCase()}_${data.hashCode}';
@@ -74,28 +73,22 @@ class QRNotifier extends StateNotifier<QRState> {
 
   Future<void> saveQR(BuildContext context) async {
     try {
-      // Generate unique ID for this QR code
       String uniqueId = state.generateUniqueId();
       
-      // Capture QR code image
       final Uint8List? image = await state.screenshotController.capture();
       if (image == null) return;
       
-      // Save to gallery
       final result = await ImageGallerySaver.saveImage(
         image,
         name: 'QR_${state.selectedType}_${DateTime.now().millisecondsSinceEpoch}',
         quality: 100,
       );
       
-      // Get the saved file path
       final String savedPath = result['filePath'] ?? '';
       
-      // Save reference to Hive for history
       final box = await Hive.openBox('qr_history');
       List<dynamic> history = box.get('saved_qr_codes', defaultValue: []) as List? ?? [];
       
-      // Create the entry map
       final Map<String, dynamic> entry = {
         'id': uniqueId,
         'path': savedPath,
@@ -103,7 +96,6 @@ class QRNotifier extends StateNotifier<QRState> {
         'timestamp': DateTime.now().millisecondsSinceEpoch,
       };
       
-      // Check if QR with same content already exists
       bool exists = history.any((item) => (item as Map)['id'] == uniqueId);
       
       if (!exists) {
@@ -123,7 +115,6 @@ class QRNotifier extends StateNotifier<QRState> {
 
   Future<void> shareQR(BuildContext context) async {
     try {
-      // Create a temporary file for sharing
       final directory = await getTemporaryDirectory();
       final String uniqueId = state.generateUniqueId();
       final filePath = '${directory.path}/qr_${state.selectedType.toLowerCase()}_$uniqueId.png';
@@ -134,15 +125,12 @@ class QRNotifier extends StateNotifier<QRState> {
       final file = File(filePath);
       await file.writeAsBytes(image);
 
-      // Save to history if not already there
       final box = await Hive.openBox('qr_history');
       List<dynamic> history = box.get('saved_qr_codes', defaultValue: []) as List? ?? [];
       
-      // Check if QR with same content already exists
       bool exists = history.any((item) => (item as Map)['id'] == uniqueId);
       
       if (!exists) {
-        // Save to gallery for history
         final result = await ImageGallerySaver.saveImage(
           image,
           name: 'QR_${state.selectedType}_${DateTime.now().millisecondsSinceEpoch}',
@@ -151,7 +139,6 @@ class QRNotifier extends StateNotifier<QRState> {
         
         final String savedPath = result['filePath'] ?? '';
         
-        // Create the entry map
         final Map<String, dynamic> entry = {
           'id': uniqueId,
           'path': savedPath,

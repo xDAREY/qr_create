@@ -211,7 +211,6 @@ class SettingsScreen extends ConsumerWidget {
                     title: const Text('Contact Us'),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () async {
-                      // Launch email directly
                       final Uri emailLaunchUri = Uri(
                         scheme: 'mailto',
                         path: 'oluwadare.emmanuel15@gmail.com',
@@ -306,7 +305,6 @@ class SettingsScreen extends ConsumerWidget {
                   await box.clear();
                 }
                 
-                // Put an empty list
                 final box = await Hive.openBox<List<String>>('qr_history');
                 await box.put('saved_qr_codes', []);
                 
@@ -345,7 +343,6 @@ class SettingsScreen extends ConsumerWidget {
           children: [
             const Text('For any queries or feedback, please contact:'),
             const SizedBox(height: 8),
-            // TODO: .env for the email address
             const SelectableText('oluwadare.emmanuel15@gmail.com'), 
             const SizedBox(height: 16),
             ElevatedButton.icon(
@@ -439,7 +436,7 @@ class SettingsScreen extends ConsumerWidget {
               : null,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black,
               spreadRadius: 1,
               blurRadius: 3,
             ),
