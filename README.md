@@ -103,8 +103,9 @@ flutter run
 ---
 
 ## 📷 Screenshot
-![Homepage](https://github.com/user-attachments/assets/e28b98c1-efe7-4fe2-853f-6b0f984aeecc)
-![QR Code History](https://github.com/user-attachments/assets/bfefe938-8fa7-40ab-bfb4-3fc91019e78f)
+![home](https://github.com/user-attachments/assets/ea537a6a-e1ac-43e2-9872-160fa40af569)
+![history](https://github.com/user-attachments/assets/bceec46f-a3b3-40ce-a3de-fe2ca3cc8744)
+![settings](https://github.com/user-attachments/assets/f5f3fe6a-ed96-4e49-bcff-c6c7aaaabcf3)
 
 ---
 
