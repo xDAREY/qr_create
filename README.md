@@ -19,8 +19,9 @@ QR Create is a powerful **QR Code Generator** built with **Flutter**. It provide
 lib/
 │── config/          # App-wide configurations
 │   ├── theme.dart   # Light & Dark mode themes
-│
-│── presentation/    # UI & state management
+│── service/
+|   ├── permission_handler.dart
+│── presentation/    # UI 
 │   ├── pages/       # Screens (Home, History, Settings)
 │   ├── widgets/     # Reusable UI components
 │
