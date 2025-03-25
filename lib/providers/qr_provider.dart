@@ -1,9 +1,8 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:qr_create/config/theme.dart';
+import 'package:qr_create/service/permission_handler.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:hive/hive.dart';
@@ -71,12 +70,10 @@ class QRNotifier extends StateNotifier<QRState> {
     state = state.copyWith(qrColor: color);
   }
 
-  Future<void> saveQR(BuildContext context) async {
+  Future<String?> _captureAndSaveQR() async {
     try {
-      String uniqueId = state.generateUniqueId();
-      
       final Uint8List? image = await state.screenshotController.capture();
-      if (image == null) return;
+      if (image == null) return null;
       
       final result = await ImageGallerySaver.saveImage(
         image,
@@ -84,21 +81,42 @@ class QRNotifier extends StateNotifier<QRState> {
         quality: 100,
       );
       
-      final String savedPath = result['filePath'] ?? '';
+      return result['filePath'] as String?;
+    } catch (e) {
+      debugPrint('Error capturing QR: $e');
+      return null;
+    }
+  }
+
+  Future<void> saveQR(BuildContext context) async {
+    final hasPermission = await PermissionService.requestStoragePermissions(context);
+    if (!hasPermission) return;
+    
+    try {
+      String uniqueId = state.generateUniqueId();
+      String? savedPath = await _captureAndSaveQR();
+      
+      if (savedPath == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to save QR Code')),
+        );
+        return;
+      }
       
       final box = await Hive.openBox('qr_history');
-      List<dynamic> history = box.get('saved_qr_codes', defaultValue: []) as List? ?? [];
+      List<dynamic> history = (box.get('saved_qr_codes') as List?) ?? [];
       
-      final Map<String, dynamic> entry = {
-        'id': uniqueId,
-        'path': savedPath,
-        'type': state.selectedType,
-        'timestamp': DateTime.now().millisecondsSinceEpoch,
-      };
-      
-      bool exists = history.any((item) => (item as Map)['id'] == uniqueId);
+      bool exists = history.any((item) => 
+        (item as Map)['id'] == uniqueId);
       
       if (!exists) {
+        final entry = {
+          'id': uniqueId,
+          'path': savedPath,
+          'type': state.selectedType,
+          'timestamp': DateTime.now().millisecondsSinceEpoch,
+        };
+        
         history.add(entry);
         await box.put('saved_qr_codes', history);
       }
@@ -114,32 +132,28 @@ class QRNotifier extends StateNotifier<QRState> {
   }
 
   Future<void> shareQR(BuildContext context) async {
+    final hasPermission = await PermissionService.requestMediaPermissions(context);
+        if (!hasPermission) return;
+
     try {
-      final directory = await getTemporaryDirectory();
-      final String uniqueId = state.generateUniqueId();
-      final filePath = '${directory.path}/qr_${state.selectedType.toLowerCase()}_$uniqueId.png';
-
-      final Uint8List? image = await state.screenshotController.capture();
-      if (image == null) return;
-
-      final file = File(filePath);
-      await file.writeAsBytes(image);
+      String uniqueId = state.generateUniqueId();
+      String? savedPath = await _captureAndSaveQR();
+      
+      if (savedPath == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to generate QR Code')),
+        );
+        return;
+      }
 
       final box = await Hive.openBox('qr_history');
-      List<dynamic> history = box.get('saved_qr_codes', defaultValue: []) as List? ?? [];
+      List<dynamic> history = (box.get('saved_qr_codes') as List?) ?? [];
       
-      bool exists = history.any((item) => (item as Map)['id'] == uniqueId);
+      bool exists = history.any((item) => 
+        (item as Map)['id'] == uniqueId);
       
       if (!exists) {
-        final result = await ImageGallerySaver.saveImage(
-          image,
-          name: 'QR_${state.selectedType}_${DateTime.now().millisecondsSinceEpoch}',
-          quality: 100,
-        );
-        
-        final String savedPath = result['filePath'] ?? '';
-        
-        final Map<String, dynamic> entry = {
+        final entry = {
           'id': uniqueId,
           'path': savedPath,
           'type': state.selectedType,
@@ -150,7 +164,7 @@ class QRNotifier extends StateNotifier<QRState> {
         await box.put('saved_qr_codes', history);
       }
 
-      await Share.shareXFiles([XFile(filePath)], text: 'Here is my QR Code!');
+      await Share.shareXFiles([XFile(savedPath)], text: 'Here is my QR Code!');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error sharing QR Code: $e')),

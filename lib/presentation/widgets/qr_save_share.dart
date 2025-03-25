@@ -14,7 +14,6 @@ class QRSaveShare extends ConsumerWidget {
 
     return Column(
       children: [
-        // Save QR Code Button
         SizedBox(
           width: double.infinity,
           child: ElevatedButton.icon(
@@ -32,7 +31,6 @@ class QRSaveShare extends ConsumerWidget {
         ),
         ),
         const SizedBox(height: 8),
-        // Share QR Code Button
         SizedBox(
           width: double.infinity,
           child: OutlinedButton.icon(

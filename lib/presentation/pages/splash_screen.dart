@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:qr_create/service/permission_handler.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -12,17 +13,24 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 5), () {
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    await PermissionService.requestStoragePermissions(context);
+
+    await Future.delayed(const Duration(seconds: 5));
+    if (mounted) {
       Navigator.pushReplacementNamed(context, '/home');
-    });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF800080), 
+      backgroundColor: const Color(0xFF800080),
       body: Center(
-        child: Image.asset("assets/image/splash_screen.png", width: 200), 
+        child: Image.asset("assets/image/splash_screen.png", width: 200),
       ),
     );
   }

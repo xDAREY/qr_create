@@ -24,7 +24,6 @@ class SettingsScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // General Section
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 16, bottom: 8),
               child: Text(
@@ -44,7 +43,6 @@ class SettingsScreen extends ConsumerWidget {
               ),
               child: Column(
                 children: [
-                  // Dark Mode Toggle
                   SwitchListTile(
                     title: const Text('Dark Mode'),
                     subtitle: const Text('Switch between light and dark themes'),
@@ -59,8 +57,6 @@ class SettingsScreen extends ConsumerWidget {
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
-                  
-                  // Theme Color Selection
                   ListTile(
                     leading: Icon(
                       Icons.color_lens,
@@ -89,8 +85,6 @@ class SettingsScreen extends ConsumerWidget {
                 ],
               ),
             ),
-            
-            // History & Storage Section
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 24, bottom: 8),
               child: Text(
@@ -139,8 +133,6 @@ class SettingsScreen extends ConsumerWidget {
                 }
               ),
             ),
-            
-            // App Information Section
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 24, bottom: 8),
               child: Text(
@@ -182,8 +174,6 @@ class SettingsScreen extends ConsumerWidget {
                 ],
               ),
             ),
-            
-            // Support Section
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 24, bottom: 8),
               child: Text(
@@ -231,14 +221,13 @@ class SettingsScreen extends ConsumerWidget {
                 ],
               ),
             ),
-            
             const SizedBox(height: 24),
           ],
         ),
       ),
     );
   }
-  
+
   void _showClearHistoryDialog(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
